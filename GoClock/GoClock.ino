@@ -7,9 +7,11 @@
 // D4 - LCD chip select (CE oder CS)
 // D3 - LCD reset (RST)
 Adafruit_PCD8544 display = Adafruit_PCD8544(7, 6, 5, 4, 3);
+const int buttonPin = 2;
+int buttonState;
+int lastButtonState = HIGH; //Originally, the button is high
 
-unsigned long t;
-unsigned long secs = 1;
+unsigned long count=0;
 
 void setup()   {
 
@@ -19,16 +21,21 @@ void setup()   {
   display.setContrast(60);
   display.clearDisplay();   // clears the screen and buffer
   display.setTextSize(3);
+  pinMode(buttonPin, INPUT_PULLUP);
 }
 
 
 void loop() {
-  t = millis();
-  if (t > 1000*secs){
-    //display.clearDisplay();
-    set_text(11,0,String(secs-1),WHITE);
-    set_text(11,0,String(secs),BLACK);
-    secs = secs + 1;
+  buttonState = digitalRead(buttonPin);
+  if (buttonState == LOW) {
+    if (lastButtonState == HIGH) { //Button was just pressed
+      count = count + 1;
+      set_text(11,0,String(count-1),WHITE);
+      set_text(11,0,String(count),BLACK);
+    }
+    lastButtonState = LOW;
+  } else { // Button state is HIGH
+    lastButtonState = HIGH;
   }
 }
 
