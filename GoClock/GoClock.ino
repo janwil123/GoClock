@@ -37,6 +37,7 @@ void loop() {
   } else { // Button state is HIGH
     lastButtonState = HIGH;
   }
+  delay(10);
 }
 
 void set_text(int x,int y,String text,int color){
